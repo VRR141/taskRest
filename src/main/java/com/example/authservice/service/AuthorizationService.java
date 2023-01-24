@@ -2,6 +2,7 @@ package com.example.authservice.service;
 
 import com.example.authservice.exception.InvalidCredentials;
 import com.example.authservice.exception.UnauthorizedUser;
+import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.util.Authorities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,15 @@ public class AuthorizationService {
         this.userRepository = userRepository;
     }
 
-    public List<Authorities> getAuthorities(String user, String password) {
-        if (isEmpty(user) || isEmpty(password)) {
+    public List<Authorities> getAuthorities(User user) {
+        String password = user.getPassword();
+        String userName = user.getUser();
+        if (isEmpty(userName) || isEmpty(password)) {
             throw new InvalidCredentials("User name or password is empty");
         }
-        List<Authorities> userAuthorities = userRepository.getUserAuthorities(user, password);
+        List<Authorities> userAuthorities = userRepository.getUserAuthorities(userName, password);
         if (isEmpty(userAuthorities)) {
-            throw new UnauthorizedUser("Unknown user " + user);
+            throw new UnauthorizedUser("Unknown user " + userName);
         }
         return userAuthorities;
     }

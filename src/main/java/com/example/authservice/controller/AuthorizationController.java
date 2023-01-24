@@ -1,10 +1,12 @@
 package com.example.authservice.controller;
 
+import com.example.authservice.model.User;
 import com.example.authservice.service.AuthorizationService;
 import com.example.authservice.util.Authorities;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class AuthorizationController {
     }
 
     @GetMapping("/authorize")
-    public List<Authorities> getAuthorities(@RequestParam("user") String user, @RequestParam("password") String password) {
-        return service.getAuthorities(user, password);
+    public List<Authorities> getAuthorities(@Valid @RequestBody User user) {
+        return service.getAuthorities(user);
     }
 }
